@@ -18,4 +18,15 @@ class FeatureContext extends MinkContext
     public function __construct()
     {
     }
+
+    /**
+     * Wait the specified number of seconds
+     *
+     *@When /^I wait (\d*) seconds$/
+     */
+    public function iWait($timeToWait)
+    {
+        $session = $this->getSession();
+        $session->wait(($timeToWait * 1000), false);
+    }
 }
