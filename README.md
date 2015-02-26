@@ -36,3 +36,6 @@ so you can configure the physical machine as the selenium host in the behat conf
 ###Running the VM
 
 vagrant up qa
+
+###Troubleshooting
+In case of problems with the port forward, change in Vagrantfile the bridge adapter value, to the interface that you want to use as a bridge
