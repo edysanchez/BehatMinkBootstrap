@@ -1,0 +1,22 @@
+---
+- name: Install Selenium
+  hosts: all
+  sudo: yes
+  tasks:
+    - apt: update_cache=yes
+    - apt: upgrade=full
+    - apt: name=iceweasel state=absent
+    - apt: name={{ item }} state=present update_cache=yes
+      with_items:
+      - openjdk-7-jre
+      - xvfb
+    - get_url: url=http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/34.0b9/linux-i686/en-GB/firefox-34.0b9.tar.bz2  dest=/home/vagrant/firefox-34.0b9.tar.bz2
+    - unarchive: src=/home/vagrant/firefox-34.0b9.tar.bz2 dest=/home/vagrant copy=no
+    - shell: mv firefox /opt/firefox-34.0.9
+    - shell: ln -sf /opt/firefox-34.0.9/firefox /usr/bin/firefox
+    - file: name=/opt/selenium state=directory mode=0755
+    - get_url: url="http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar" dest=/opt/selenium/selenium.jar
+    - copy: src=templates/selenium/selenium.sh dest=/opt/selenium/selenium.sh mode=0755
+    - copy: src=templates/selenium/selenium-service.sh dest=/etc/init.d/selenium mode=0755
+    - service: name=selenium enabled=yes
+    - service: name=selenium state=started
